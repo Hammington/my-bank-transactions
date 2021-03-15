@@ -1,0 +1,27 @@
+// @no-log
+POST http://localhost:8080/transactions?reference=testTransaction&amount=100
+Accept: application/json
+Content-Type: application/json
+
+{ "reference": "testTransaction", "amount": 100 }
+
+###
+// @no-log
+POST http://localhost:8080/transactions?reference=anotherTest&amount=150
+Accept: application/json
+
+{ "reference": "anotherTest", "amount": 150.54 }
+
+> {%
+client.global.set( 'transaction-id', response.body[ 'id' ] );
+ %}
+
+###
+// @no-log
+GET http://localhost:8080/transactions
+Accept: application/json
+
+###
+// @no-log
+GET http://localhost:8080/transactions/find?id={{transaction-id}}
+Accept: application/json
