@@ -1,9 +1,12 @@
 // @no-log
-POST http://localhost:8080/transactions?reference=testTransaction&amount=100
-Accept: application/json
-Content-Type: application/json
+POST http://localhost:8080/transactions
+Accept: application/xml
+Content-Type: application/xml
 
-{ "reference": "testTransaction", "amount": 100 }
+<transaction>
+    <reference>test</reference>
+    <amount>10</amount>
+</transaction>
 
 ###
 // @no-log
@@ -19,7 +22,7 @@ client.global.set( 'transaction-id', response.body[ 'id' ] );
 ###
 // @no-log
 GET http://localhost:8080/transactions
-Accept: application/json
+Accept: application/xml
 
 ###
 // @no-log

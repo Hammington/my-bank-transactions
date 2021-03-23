@@ -25,7 +25,12 @@ public class TransactionService {
 
    public Transaction create( String reference, BigDecimal amount ) {
       final var id = UUID.randomUUID().toString();
-      return TRANSACTIONS.computeIfAbsent( id, ( theId ) -> new Transaction( theId, LocalDateTime.now(), amount, reference, slogan_ ) );
+      return TRANSACTIONS.computeIfAbsent( id,
+                                           ( theId ) -> new Transaction( theId,
+                                                                         LocalDateTime.now(),
+                                                                         amount,
+                                                                         reference,
+                                                                         slogan_ ) );
    }
 
    public Collection< Transaction > getAll() {

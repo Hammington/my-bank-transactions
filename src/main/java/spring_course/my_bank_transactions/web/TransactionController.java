@@ -1,16 +1,20 @@
 package spring_course.my_bank_transactions.web;
 
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import spring_course.my_bank_transactions.dto.TransactionDto;
+import spring_course.my_bank_transactions.dto.TransactionList;
 import spring_course.my_bank_transactions.model.Transaction;
 import spring_course.my_bank_transactions.service.TransactionService;
 
-import java.util.Collection;
+import javax.validation.Valid;
 
 @RestController
+@Validated
 public class TransactionController {
 
    private final TransactionService transactionService_;
@@ -20,8 +24,8 @@ public class TransactionController {
    }
 
    @GetMapping( "/transactions" )
-   public Collection< Transaction > getTransactions() {
-      return transactionService_.getAll();
+   public TransactionList getTransactions() {
+      return new TransactionList( transactionService_.getAll() );
    }
 
    @GetMapping( "/transactions/find" )
@@ -30,8 +34,7 @@ public class TransactionController {
    }
 
    @PostMapping( "/transactions" )
-   public Transaction createTransaction( final TransactionDto transaction ) {
-      System.out.println("create me");
+   public Transaction createTransaction( @RequestBody @Valid TransactionDto transaction ) {
       return transactionService_.create( transaction.getReference(), transaction.getAmount() );
    }
 }

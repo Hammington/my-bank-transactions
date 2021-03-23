@@ -15,11 +15,13 @@ public class ApplicationLauncher {
       tomcat.setPort( Optional.ofNullable( serverPort ).map( Integer::valueOf ).orElse( 8080 ) );
       tomcat.getConnector();
 
+      final var context = tomcat.addContext( "", null );
       final var applicationContext = new AnnotationConfigWebApplicationContext();
       applicationContext.register( MyBankTransactionsApplicationConfiguration.class );
+      applicationContext.setServletContext( context.getServletContext() );
+      applicationContext.refresh();
       applicationContext.registerShutdownHook();
 
-      final var context = tomcat.addContext( "", null );
       final var servlet = Tomcat.addServlet( context, "myFirstServlet", new DispatcherServlet( applicationContext ) );
       servlet.setLoadOnStartup( 1 );
       servlet.addMapping( "/*" );
