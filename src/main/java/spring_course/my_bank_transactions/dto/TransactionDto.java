@@ -16,23 +16,48 @@ public class TransactionDto {
    @NotBlank
    @NotNull
    @JacksonXmlProperty( isAttribute = true, localName = "reference" )
-   private final String reference_;
+   private String reference;
    @Min( 100 ) @Max( 500 )
    @JacksonXmlProperty( isAttribute = true, localName = "amount" )
-   private final BigDecimal amount_;
+   private BigDecimal amount;
+   private String receivingUserId;
+
+   public TransactionDto() {}
 
    @JsonCreator
    public TransactionDto( @JsonProperty( "reference" ) final String reference,
-                          @JsonProperty( "amount" ) final BigDecimal amount ) {
-      reference_ = reference;
-      amount_ = amount;
+                          @JsonProperty( "amount" ) final BigDecimal amount,
+                          @JsonProperty( "userId" ) final String receivingUserId ) {
+      this.reference = reference;
+      this.amount = amount;
+      this.receivingUserId = receivingUserId;
    }
 
    public String getReference() {
-      return reference_;
+      return reference;
    }
 
    public BigDecimal getAmount() {
-      return amount_;
+      return amount;
+   }
+
+   public String getReceivingUserId()
+   {
+      return receivingUserId;
+   }
+
+   public void setReference( String reference )
+   {
+      this.reference = reference;
+   }
+
+   public void setAmount( BigDecimal amount )
+   {
+      this.amount = amount;
+   }
+
+   public void setReceivingUserId( String receivingUserId )
+   {
+      this.receivingUserId = receivingUserId;
    }
 }

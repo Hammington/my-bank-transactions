@@ -15,6 +15,9 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
+import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import spring_course.my_bank_transactions.ApplicationLauncher;
 
 import java.util.List;
@@ -45,5 +48,33 @@ public class MyBankTransactionsApplicationConfiguration implements WebMvcConfigu
 
       converters.add( new MappingJackson2HttpMessageConverter( builder.build() ) );
       converters.add( new MappingJackson2XmlHttpMessageConverter( builder.createXmlMapper( true ).build() ) );
+   }
+
+   @Bean
+   public SpringResourceTemplateResolver getTemplateResolver()
+   {
+      final var templateResolver = new SpringResourceTemplateResolver();
+      templateResolver.setCacheable( false );
+      templateResolver.setPrefix( "classpath:/templates/" );
+      return templateResolver;
+   }
+
+   @Bean
+   public SpringTemplateEngine getTemplateEngine()
+   {
+      final var templateEngine = new SpringTemplateEngine();
+      templateEngine.setTemplateResolver( getTemplateResolver() );
+      templateEngine.setEnableSpringELCompiler( true );
+      return templateEngine;
+   }
+
+   @Bean
+   public ThymeleafViewResolver getViewResolver()
+   {
+      final var viewResolver = new ThymeleafViewResolver();
+      viewResolver.setTemplateEngine( getTemplateEngine() );
+      viewResolver.setOrder( 1 );
+      viewResolver.setViewNames( new String[] { "*.html", "*.xhtml" } );
+      return viewResolver;
    }
 }

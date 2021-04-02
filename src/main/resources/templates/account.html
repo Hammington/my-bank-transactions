@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<style type="text/css">
+   label {
+      width: 100px;
+      display: inline-block;
+      padding: 0 5px;
+   }
+
+   table {
+      padding: 10px 5px;
+   }
+</style>
+<head>
+   <meta charset="UTF-8">
+   <title th:text="${'Account of ' + userId}">[title]</title>
+</head>
+<body>
+<form action="#" th:action="@{/account/{userId}/transaction(userId=${userId})}" th:object="${newTransaction}" method="post" >
+   <h3>Create new transaction</h3>
+   <p><label for="receivingUserId" >Receiving User</label><input type="text" th:field="*{receivingUserId}" /></p>
+   <p><label for="reference" >Reference</label><input type="text" th:field="*{reference}" /></p>
+   <p><label for="amount" >Amount</label><input type="number" th:field="*{amount}" /></p>
+   <input type="submit" value="Send" />
+</form>
+<table>
+   <thead>
+      <tr>
+         <th>Reference</th>
+         <th>Amount</th>
+         <th>Time</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr th:each="trans: ${transactions}">
+         <td th:text="${trans.reference}" ></td>
+         <td th:text="${trans.amount}"></td>
+         <td th:text="${trans.timeStamp}"></td>
+      </tr>
+   </tbody>
+</table>
+</body>
