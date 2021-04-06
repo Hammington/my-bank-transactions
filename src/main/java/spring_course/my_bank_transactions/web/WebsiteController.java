@@ -11,6 +11,8 @@ import spring_course.my_bank_transactions.dto.TransactionDto;
 import spring_course.my_bank_transactions.service.AccountService;
 import spring_course.my_bank_transactions.service.TransactionService;
 
+import java.util.Objects;
+
 @Controller
 public class WebsiteController
 {
@@ -29,19 +31,30 @@ public class WebsiteController
       final var account = accountService_.supplyAccount( userId );
       model.addAttribute( "transactions", account.getTransactions() );
       model.addAttribute( "userId", userId );
+      model.addAttribute( "balance", account.getBalance() );
       return "account.html";
    }
 
    @PostMapping( "account/{userId}/transaction" )
-   public String createTransaction( @PathVariable( "userId" ) final String userId,
-                                    @ModelAttribute final TransactionDto transactionDto,
-                                    final BindingResult result,
-                                    Model model ) {
-      final var transaction = transactionService_.create( transactionDto.getReference(), transactionDto.getAmount() );
-      accountService_.supplyAccount( transactionDto.getReceivingUserId() ).addTransaction( transaction );
-      model.addAttribute( "transactions", accountService_.supplyAccount( userId ).getTransactions() );
-      model.addAttribute( "userId", userId );
-      return "account.html";
+   public String createTransaction(
+      @PathVariable( "userId" ) final String userId,
+      @ModelAttribute final TransactionDto transactionDto,
+      final BindingResult result,
+      final Model model )
+   {
+      final var account = accountService_.supplyAccount( transactionDto.getReceivingUserId() );
+      accountService_.updateBalance( account, transactionDto.getAmount() );
+      account.setBalance( account.getBalance().add( transactionDto.getAmount() ) );
+      transactionService_.create( account, transactionDto.getReference(), transactionDto.getAmount() );
+
+      final var isPayIn = Objects.equals( userId, transactionDto.getReceivingUserId() );
+
+      if( !isPayIn ) {
+         final var userAccount = accountService_.supplyAccount( userId );
+         accountService_.updateBalance( userAccount, transactionDto.getAmount().negate() );
+         transactionService_.create( userAccount, transactionDto.getReference(), transactionDto.getAmount().negate() );
+      }
+      return "redirect:/account/" + userId;
    }
 
    @ModelAttribute( "newTransaction" )

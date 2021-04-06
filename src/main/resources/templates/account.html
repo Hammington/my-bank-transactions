@@ -16,6 +16,9 @@
    <title th:text="${'Account of ' + userId}">[title]</title>
 </head>
 <body>
+<p>
+   <span th:text="${'Balance: '+ balance}" >[balance]</span>
+</p>
 <form action="#" th:action="@{/account/{userId}/transaction(userId=${userId})}" th:object="${newTransaction}" method="post" >
    <h3>Create new transaction</h3>
    <p><label for="receivingUserId" >Receiving User</label><input type="text" th:field="*{receivingUserId}" /></p>

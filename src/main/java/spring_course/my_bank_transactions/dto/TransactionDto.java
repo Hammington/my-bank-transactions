@@ -20,6 +20,9 @@ public class TransactionDto {
    @Min( 100 ) @Max( 500 )
    @JacksonXmlProperty( isAttribute = true, localName = "amount" )
    private BigDecimal amount;
+   @NotBlank
+   @NotNull
+   @JacksonXmlProperty( isAttribute = true, localName = "userId" )
    private String receivingUserId;
 
    public TransactionDto() {}
