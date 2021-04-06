@@ -11,6 +11,7 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -26,6 +27,7 @@ import java.util.List;
 @EnableWebMvc
 @ComponentScan( basePackageClasses = ApplicationLauncher.class )
 @PropertySource( "classpath:/application.properties" )
+@EnableTransactionManagement
 public class MyBankTransactionsApplicationConfiguration implements WebMvcConfigurer {
 
    @Bean
@@ -40,7 +42,8 @@ public class MyBankTransactionsApplicationConfiguration implements WebMvcConfigu
    }
 
    @Override
-   public void configureMessageConverters( List< HttpMessageConverter< ? > > converters ) {
+   public void configureMessageConverters( List< HttpMessageConverter< ? > > converters )
+   {
       final var builder = new Jackson2ObjectMapperBuilder().indentOutput( true )
                                                            .serializationInclusion( JsonInclude.Include.NON_NULL )
                                                            .modules( new JavaTimeModule() )
