@@ -1,11 +1,10 @@
 // @no-log
-// somehow this does not work anymore, so for i cannot find the reason for that
 POST http://localhost:8080/transactions
 Content-Type: application/xml
 
 <transaction>
     <reference>test</reference>
-    <amount>10</amount>
+    <amount>100</amount>
     <userId>myTest</userId>
 </transaction>
 
